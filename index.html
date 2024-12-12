@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Facts Explorer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0a192f;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #64ffda;
+        }
+
+        .filter-container {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        select {
+            padding: 0.5rem;
+            font-size: 1rem;
+            border-radius: 4px;
+            background-color: #172a45;
+            color: #ffffff;
+            border: 1px solid #64ffda;
+        }
+
+        .facts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .fact-card {
+            background-color: #172a45;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #64ffda;
+            transition: transform 0.3s ease;
+        }
+
+        .fact-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .fact-category {
+            color: #64ffda;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .fact-text {
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Amazing Space Facts</h1>
+        <div class="filter-container">
+            <select id="categoryFilter">
+                <option value="all">All Categories</option>
+            </select>
+        </div>
+        <div id="factsContainer" class="facts-grid"></div>
+    </div>
+
+    <script>
+        const spaceFacts = {
+            "spaceFacts": [
+                {
+                    "id": 1,
+                    "fact": "One million Earths could fit inside the Sun",
+                    "category": "Solar System"
+                },
+                {
+                    "id": 2,
+                    "fact": "The footprints on the Moon will last for 100 million years",
+                    "category": "Moon"
+                },
+                {
+                    "id": 3,
+                    "fact": "A day on Venus is longer than its year",
+                    "category": "Planets"
+                },
+                {
+                    "id": 4,
+                    "fact": "The largest known star, UY Scuti, is 1,700 times bigger than our Sun",
+                    "category": "Stars"
+                },
+                {
+                    "id": 5,
+                    "fact": "Light from the Sun takes about 8 minutes to reach Earth",
+                    "category": "Physics"
+                },
+                {
+                    "id": 6,
+                    "fact": "There are more stars in the universe than grains of sand on Earth",
+                    "category": "Universe"
+                },
+                {
+                    "id": 7,
+                    "fact": "The Milky Way galaxy is about 100,000 light-years across",
+                    "category": "Galaxy"
+                },
+                {
+                    "id": 8,
+                    "fact": "Saturn's rings are mostly made of ice and rock",
+                    "category": "Planets"
+                },
+                {
+                    "id": 9,
+                    "fact": "There is a planet made of diamonds (55 Cancri e)",
+                    "category": "Exoplanets"
+                },
+                {
+                    "id": 10,
+                    "fact": "Space is completely silent because there is no air to carry sound waves",
+                    "category": "Physics"
+                },
+                {
+                    "id": 11,
+                    "fact": "The largest known galaxy is IC 1101, which is 50 times larger than the Milky Way",
+                    "category": "Galaxy"
+                },
+                {
+                    "id": 12,
+                    "fact": "Astronauts grow taller in space due to the lack of gravity",
+                    "category": "Space Travel"
+                },
+                {
+                    "id": 13,
+                    "fact": "Jupiter's Great Red Spot is shrinking",
+                    "category": "Planets"
+                },
+                {
+                    "id": 14,
+                    "fact": "There are more trees on Earth than stars in the Milky Way",
+                    "category": "Comparisons"
+                },
+                {
+                    "id": 15,
+                    "fact": "The most distant galaxy discovered is GN-z11",
+                    "category": "Galaxy"
+                },
+                {
+                    "id": 16,
+                    "fact": "A black hole's gravitational pull is so strong that even light cannot escape it",
+                    "category": "Black Holes"
+                },
+                {
+                    "id": 17,
+                    "fact": "The International Space Station travels at a speed of 17,500 mph",
+                    "category": "Space Travel"
+                },
+                {
+                    "id": 18,
+                    "fact": "Mercury and Venus are the only planets in our solar system with no moons",
+                    "category": "Planets"
+                },
+                {
+                    "id": 19,
+                    "fact": "The largest asteroid in our solar system is Ceres, at 940 km in diameter",
+                    "category": "Asteroids"
+                },
+                {
+                    "id": 20,
+                    "fact": "There are billions of galaxies in the observable universe",
+                    "category": "Universe"
+                }
+            ]
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const factsContainer = document.getElementById('factsContainer');
+            const categoryFilter = document.getElementById('categoryFilter');
+            
+            // Get unique categories and populate filter
+            const categories = [...new Set(spaceFacts.spaceFacts.map(fact => fact.category))];
+            categories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                categoryFilter.appendChild(option);
+            });
+
+            // Display facts function
+            function displayFacts(facts) {
+                factsContainer.innerHTML = '';
+                facts.forEach(fact => {
+                    const factCard = document.createElement('div');
+                    factCard.className = 'fact-card';
+                    factCard.innerHTML = `
+                        <div class="fact-category">${fact.category}</div>
+                        <div class="fact-text">${fact.fact}</div>
+                    `;
+                    factsContainer.appendChild(factCard);
+                });
+            }
+
+            // Initial display
+            displayFacts(spaceFacts.spaceFacts);
+
+            // Filter event listener
+            categoryFilter.addEventListener('change', (e) => {
+                const selectedCategory = e.target.value;
+                const filteredFacts = selectedCategory === 'all' 
+                    ? spaceFacts.spaceFacts 
+                    : spaceFacts.spaceFacts.filter(fact => fact.category === selectedCategory);
+                displayFacts(filteredFacts);
+            });
+        });
+    </script>
+</body>
+</html>
