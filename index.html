@@ -228,6 +228,38 @@
                     : spaceFacts.spaceFacts.filter(fact => fact.category === selectedCategory);
                 displayFacts(filteredFacts);
             });
+            // Function to map categories to image URLs
+function getCategoryImage(category) {
+    const imageMap = {
+        "Solar System": "url_to_solar_system_image.jpg",
+        "Moon": "url_to_moon_image.jpg",
+        "Planets": "url_to_planets_image.jpg",
+        // Add more image URLs for other categories
+    };
+
+    // Return a default image if category not found
+    return imageMap[category] || "default_image_url.jpg";
+}
+
+// Display facts function
+function displayFacts(facts) {
+    factsContainer.innerHTML = '';
+    facts.forEach(fact => {
+        const factCard = document.createElement('div');
+        factCard.className = 'fact-card';
+
+        // Add an image based on the category
+        const imageUrl = getCategoryImage(fact.category);
+
+        factCard.innerHTML = `
+            <img src="${imageUrl}" alt="${fact.category}" class="fact-image">
+            <div class="fact-category">${fact.category}</div>
+            <div class="fact-text">${fact.fact}</div>
+        `;
+        factsContainer.appendChild(factCard);
+    });
+}
+
         });
     </script>
 </body>
